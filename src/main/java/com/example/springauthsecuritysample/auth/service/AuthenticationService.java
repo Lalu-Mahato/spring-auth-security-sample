@@ -2,7 +2,6 @@ package com.example.springauthsecuritysample.auth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -63,10 +62,12 @@ public class AuthenticationService implements UserDetailsService {
             var token = jwtService.generateToken((User) auth.getPrincipal());
 
             LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setId(((User) auth.getPrincipal()).getId());
+            loginResponse.setName(((User) auth.getPrincipal()).getName());
             loginResponse.setEmail(loginUserDTO.getEmail());
+            loginResponse.setRole(((User) auth.getPrincipal()).getRole());
             loginResponse.setToken(token);
             return ResponseEntity.ok(loginResponse);
-
         } catch (Exception e) {
             return ResponseEntity.ok("User not found");
         }
